@@ -174,7 +174,8 @@ class Profile extends BaseController
                 session()->setFlashdata('success', 'Anda telah berhasil daftar silahkan login.');
                 return view('qrcode/result', $setData);
             } else {
-                die() && 'Erorr';
+                session()->setFlashdata('error', 'Password Salah');
+                return redirect()->back()->withInput();
             }
         } else {
             session()->setFlashdata('password_error', 'Password Salah');
