@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\Antrian;
 
 class Home extends BaseController
 {
     public function index()
     {
+        $antri = new Antrian();
         $data = [
+            'antrian' => $antri->getAntrianSaatIni()->getResult(),
             'Login' => FALSE,
             'QRCodeLogin' => TRUE,
             'pages' => 'Masuk'

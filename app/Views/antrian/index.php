@@ -17,6 +17,7 @@
                                         <?php echo session()->getFlashdata('error'); ?>
                                     </div>
                                 <?php endif; ?>
+                                <a href="<?= base_url('Antrians/truncateAntrian') ?>" class="btn btn-danger mr-2 mb-4">Akhiri Mode Antrian</a>
                                 <div class="table-responsive">
                                     <table id="dataTableExample" class="table">
                                         <thead>

@@ -19,7 +19,7 @@ class Auth extends BaseController
     {
         $model = new User();
         $qrcode = $this->request->getVar('qrcode');
-        $data = explode('|', $qrcode);
+        $data = explode('|', $qrcode); // |user|user|
         $username = $data[1];
         $password = $data[2];
         $dataUser = $model->where(['username' => $username,])->first();
@@ -34,10 +34,9 @@ class Auth extends BaseController
                     'role'      => $dataUser['role'],
                     'tl'        => $dataUser['tl'],
                     'nomor_identitas' => $dataUser['nomor_identitas'],
-                    'QRLogin'   => TRUE,
                     'WesLogin'  => TRUE, 
                 ]);
-                return redirect()->to(base_url('dashboard'));
+                return redirect()->to(base_url('pasien'));
             } else {
                 session()->setFlashdata('error', 'QR Code anda salah, silahkan cetak ulang/hubungi admin!');
                 return redirect()->to('login');
@@ -67,7 +66,11 @@ class Auth extends BaseController
                     'tl'        => $dataUser['tl'],
                     'WesLogin'  => TRUE, 
                 ]);
-                return redirect()->to(base_url('dashboard'));
+                if($dataUser['role'] === 'pasien') {
+                    return redirect()->to(base_url('pasien'));
+                } elseif($dataUser['role'] === 'admin') {
+                    return redirect()->to(base_url('dashboard'));
+                }
             } else {
                 session()->setFlashdata('error', 'Password Salah!');
                 return redirect()->to('masuk');
@@ -156,39 +159,12 @@ class Auth extends BaseController
             'gender'    => $this->request->getVar('gender'),
             'role'      => 'pasien',
         ];
-        if($model->save($data)) {
-            $writer = new PngWriter();
-            $user = '|'.$username.'|'.$password.'|';
-            // Create QR code
-            $qrCode = QrCode::create($user)
-                ->setEncoding(new Encoding('UTF-8'))
-                ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
-                ->setSize(300)
-                ->setMargin(10)
-                ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
-                ->setForegroundColor(new Color(0, 0, 0))
-                ->setBackgroundColor(new Color(255, 255, 255));
-
-            $result = $writer->write($qrCode);
-
-            // Directly output the QR code
-            //header('Content-Type: '.$result->getMimeType());
-            //echo $result->getString('Test');
-
-            // Save it to a file
-            $result->saveToFile(WRITEPATH.'qrcode.png');
-
-            header('Content-Type: '.$result->getMimeType());
-            echo $result->getString();
-
-            $setData = [
-                'QRCODE' => $result,
-                'WesRegister' => TRUE
-            ];
+        if ($model->save($data)) {
             session()->setFlashdata('success', 'Anda telah berhasil daftar silahkan login.');
-            return view('qrcode/result', $setData);
+            return redirect()->to('login');
         } else {
-            die() && 'Erorr';
+            session()->setFlashdata('error', 'Terjadi Error!');
+            return redirect()->to('register');
         }
     }
 }

@@ -58,13 +58,13 @@ $(function() {
       })
       
       swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Apa anda yakin?',
+        text: "Anda tidak akan dapat mengembalikan ini!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'mr-2',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: 'Ya, Akhiri!',
+        cancelButtonText: 'Tidak, batal!',
         reverseButtons: true
       }).then((result) => {
         if (result.value) {

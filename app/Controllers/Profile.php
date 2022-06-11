@@ -152,14 +152,17 @@ class Profile extends BaseController
                     ->setForegroundColor(new Color(0, 0, 0))
                     ->setBackgroundColor(new Color(255, 255, 255));
 
-                $result = $writer->write($qrCode);
+                $logo = Logo::create(__DIR__.'\logo-p.png')
+                    ->setResizeToWidth(50);
+
+                $result = $writer->write($qrCode, $logo);
 
                 // Directly output the QR code
                 //header('Content-Type: '.$result->getMimeType());
                 //echo $result->getString('Test');
 
                 // Save it to a file
-                $result->saveToFile(WRITEPATH.'qrcode.png');
+                $result->saveToFile('qrcode.png');
 
                 header('Content-Type: '.$result->getMimeType());
                 echo $result->getString();

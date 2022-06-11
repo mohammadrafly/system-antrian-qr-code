@@ -35,7 +35,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 //QRLog
 $routes->get('login', 'Home::login');
-$routes->post('login', 'Auth::loginQR');
+$routes->post('loginQR', 'Auth::loginQR');
 //UsernameLog
 $routes->post('masuk', 'Auth::login');
 $routes->get('masuk', 'Home::loginWUsername');
@@ -50,7 +50,8 @@ $routes->get('logout', 'Auth::logout');
 $routes->post('antrian/pilih/(:num)', 'Antrians::addPasien/$1');
 $routes->get('antrian/cetak/nomor/antrian/(:num)', 'Antrians::cetakAntrian/$1');
 //Dashboard
-$routes->get('dashboard', 'Dashboard::index');
+$routes->get('dashboard', 'Dashboard::indexBackEnd');
+$routes->get('pasien', 'Dashboard::index');
 //Profile
 $routes->get('dashboard/profile/(:any)', 'Profile::index/$1');
 $routes->post('dashboard/profile/update', 'Profile::update');
@@ -60,6 +61,7 @@ $routes->post('dashboard/profile/cetak/qrcode', 'Profile::cetakQRCode');
 $routes->get('dashboard/antrian/(:any)', 'Antrians::index/$1');
 $routes->get('dashboard/antrian/edit/(:num)', 'Antrians::edit/$1');
 $routes->post('dashboard/antrian/update', 'Antrians::update');
+$routes->post('dashboard/antrian/akhiri', 'Antrians::truncateAntrian');
 //Poli
 $routes->get('dashboard/poli', 'Poliklinik::index');
 $routes->get('dashboard/poli/add', 'Poliklinik::add');

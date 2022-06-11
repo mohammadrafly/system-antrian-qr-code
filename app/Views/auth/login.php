@@ -1,7 +1,7 @@
 <?= $this->extend('layout/auth') ?>
 
 <?= $this->section('content') ?>
-        <form action="<?= base_url('login') ?>" method="POST" id="myForm" hidden>
+        <form action="<?= base_url('loginQR') ?>" method="POST" id="myForm" hidden>
           <fieldset class="scheduler-border">
             <legend class="scheduler-border"> Form Scan </legend>
             <input type="text" name="qrcode" id="code" autofocus>
@@ -17,6 +17,16 @@
           <div class="row justify-content-center">
             <div class="col-md-8">
               <div class="mb-4">
+                                <?php if (!empty(session()->getFlashdata('success'))) : ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <?php echo session()->getFlashdata('success'); ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty(session()->getFlashdata('error'))) : ?>
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <?php echo session()->getFlashdata('error'); ?>
+                                    </div>
+                                <?php endif; ?>
               <h3>Daftar</h3>
               <p class="mb-4">Baru disini? Mendaftar itu mudah. Hanya butuh beberapa langkah</p>
             </div>
@@ -31,8 +41,8 @@
                 </button>
               </from>
               <div class="mt-4">
-                <h5 class="code">Klik Login > Scan QR Code > Pilih Poli > Klik Cetak</h5>
-                <h5 class="code">Pasien melakukan Registrasi > Input Data Diri > Klik Login >  Pilih Poli > Klik Cetak </h5>
+                <h5>Klik Login > Scan QR Code > Pilih Poli > Klik Cetak</h5>
+                <h5>Pasien melakukan Registrasi > Input Data Diri > Klik Login >  Pilih Poli > Klik Cetak </h5>
               </div>
             </div>
           </div>

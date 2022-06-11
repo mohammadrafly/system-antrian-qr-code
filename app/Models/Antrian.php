@@ -58,11 +58,62 @@ class Antrian extends Model
         return $builder;
     }
 
-    public function getAntrian()
+    public function getAntrian($id)
     {        
         $builder = $this->db->table('antrian')
                     ->limit('1')
                     ->orderBy('nomor_antrian','DESC')
+                    ->where('poli', $id)
+                    ->where('date', date('Y-m-d'))
+                    ->get();
+        return $builder;
+    }
+
+    public function getAntrianByID()
+    {        
+        $builder = $this->db->table('antrian')
+                    ->limit('1')
+                    ->join('poli', 'poli.id = antrian.poli', 'left')
+                    ->select('antrian.*, poli.title AS nama_poli')
+                    ->orderBy('nomor_antrian','DESC')
+                    ->where('date', date('Y-m-d'))
+                    ->where('user', session()->get('id'))
+                    ->get();
+        return $builder;
+    }
+
+    public function getAntrianSaatIni()
+    {        
+        $builder = $this->db->table('antrian')
+                    ->limit('1')
+                    ->orderBy('nomor_antrian','ASC')
+                    ->where('date', date('Y-m-d'))
+                    ->where('status !=', 'SELESAI')
+                    ->get();
+        return $builder;
+    }
+
+    public function getAntrianSaatIniByKat()
+    {        
+        $builder = $this->db->table('antrian')
+                    ->limit('4')
+                    ->join('poli', 'poli.id = antrian.poli', 'left')
+                    ->select('antrian.*, poli.title AS nama_poli')
+                    ->orderBy('nomor_antrian','ASC')
+                    ->orderBy('poli','DESC')
+                    ->where('date', date('Y-m-d'))
+                    ->where('status !=', 'SELESAI')
+                    ->get();
+        return $builder;
+    }
+
+    public function LatestDate()
+    {
+        $builder = $this->db->table('antrian')
+                    ->limit('1')
+                    ->orderBy('date', 'DESC')
+                    ->where('status !=', 'SELESAI')
+                    ->where('id', session()->get('id'))
                     ->where('date', date('Y-m-d'))
                     ->get();
         return $builder;

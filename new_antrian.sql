@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 07, 2022 at 12:50 AM
+-- Generation Time: Jun 09, 2022 at 03:00 PM
 -- Server version: 5.7.33
 -- PHP Version: 8.1.6
 
@@ -36,14 +36,6 @@ CREATE TABLE `antrian` (
   `status` enum('BELUM SELESAI','SELESAI') NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `antrian`
---
-
-INSERT INTO `antrian` (`id`, `user`, `poli`, `nomor_antrian`, `date`, `status`) VALUES
-(1, 1, 2, 1, '2022-06-07', 'BELUM SELESAI'),
-(41, 99, 2, 2, '2022-06-07', 'SELESAI');
-
 -- --------------------------------------------------------
 
 --
@@ -62,8 +54,10 @@ CREATE TABLE `poli` (
 --
 
 INSERT INTO `poli` (`id`, `kode`, `title`, `limits`) VALUES
-(2, 'PANAK', 'Poli Anak', 50),
-(3, 'POIH', 'Poliklinik Ibu Hamil', 30);
+(6, 'POZI', 'Poli Gizi', 30),
+(5, 'POUM', 'Poli Umum', 30),
+(7, 'POIA', 'Poli KIA', 30),
+(8, 'POGI', 'Poli Gigi', 30);
 
 -- --------------------------------------------------------
 
@@ -92,8 +86,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nomor_identitas`, `username`, `password`, `name`, `phone`, `tl`, `address`, `gender`, `role`, `qrcode`, `created_at`, `updated_at`) VALUES
-(1, '3512323127362', 'admin', '$2a$12$uTVw1FwEA7GW.hpkrwkMwOxqJIo4/fia/ooRqrdii6jKA3XdballO', 'admin', '0823746627362', '2022-06-06', 'Jember', 'laki-laki', 'admin', NULL, '2022-06-07 02:05:27', '2022-06-07 02:05:27'),
-(99, '35123421233453', 'test123', '$2a$12$yGnPJUXQ3OKDWmXvtHNPTOBuPMW2MoVyTGtwDysAPbFnGWkw2/she', 'test123', '087675647323', '2022-06-23', 'Jember', 'laki-laki', 'pasien', NULL, '2022-06-06 23:40:00', '2022-06-06 23:40:00');
+(1, '3512323127362', 'admin', '$2a$12$uTVw1FwEA7GW.hpkrwkMwOxqJIo4/fia/ooRqrdii6jKA3XdballO', 'admin', '0823746627362', '2022-06-06', 'Jember', 'laki-laki', 'admin', NULL, '2022-06-07 02:05:27', '2022-06-07 02:05:27');
 
 --
 -- Indexes for dumped tables
@@ -125,19 +118,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `antrian`
 --
 ALTER TABLE `antrian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `poli`
 --
 ALTER TABLE `poli`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

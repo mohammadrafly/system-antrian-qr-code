@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Antrian;
+use App\Models\User;
+use App\Models\Poli;
 use Dompdf\Dompdf;
 
 class Antrians extends BaseController
@@ -47,10 +49,14 @@ class Antrians extends BaseController
     public function addPasien($id)
     {
         $model = new Antrian();
-        $result = $model->getAntrian()->getResult();
-        foreach ($result as $row): {
-            $no = $row->nomor_antrian;
-        } endforeach;
+        $result = $model->getAntrian($id)->getResult();
+        if ($result) {
+            foreach ($result as $row): {
+                $no = $row->nomor_antrian;
+            } endforeach;
+        } else {
+            $no = 0;
+        }
         $user = session()->get('id');
         $date = date('Y-m-d');
         $no = $no + 1;
@@ -61,18 +67,18 @@ class Antrians extends BaseController
             'date' => $date,
         ];
         $check = $model->where('user', $user)->first();
-        if($check == null) {
-            if($model->save($data)) {
+        if ($check === null) {
+			if($model->save($data)) {
                 session()->setFlashData('success','Permintaan berhasil, silahkan tunggu!');
-            return $this->response->redirect(site_url('dashboard'));
+                return $this->response->redirect(site_url('pasien'));
             } else {
                 session()->setFlashData('error','Terjadi error!');
-                return $this->response->redirect(site_url('dashboard'));
+                return $this->response->redirect(site_url('pasien'));
             }
         } else {
-            session()->setFlashData('error','Maaf Anda hanya bisa melakukan permintaan ini 1 x 24 jam.');
-            return $this->response->redirect(site_url('dashboard'));
-        }   
+			session()->setFlashData('error','Maaf Anda hanya bisa melakukan permintaan ini 1 x 24 jam.');
+            return $this->response->redirect(site_url('pasien'));
+        }
     }
 
     public function cetakAntrian($id)
@@ -90,7 +96,7 @@ class Antrians extends BaseController
         $data = [
             'content' => $model->where('id', $id)->first(),
         ];
-        $filename = date('y-m-d-H-i-s'). '-qadr-labs-report';
+        $filename = date('y-m-d-H-i-s'). '_nomor_antrian';
 
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
@@ -106,5 +112,17 @@ class Antrians extends BaseController
 
         // output the generated pdf
         $dompdf->stream($filename);
+    }
+
+    public function truncateAntrian()
+    {
+        $model = new Antrian();
+        if ($model->emptyTable()) {
+            session()->setFlashData('success','Mode antrian telah diakhiri.');
+            return $this->response->redirect(site_url('dashboard/antrian/'.date('Y-m-d')));
+        } else {
+            session()->setFlashData('success','Mode antrian telah diakhiri.');
+            return $this->response->redirect(site_url('dashboard/antrian/'.date('Y-m-d')));
+        }
     }
 }
