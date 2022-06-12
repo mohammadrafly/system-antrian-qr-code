@@ -33,8 +33,9 @@ class Auth extends BaseController
                     'address'   => $dataUser['address'],
                     'role'      => $dataUser['role'],
                     'tl'        => $dataUser['tl'],
+                    'status_account' => $dataUser['status_account'],
                     'nomor_identitas' => $dataUser['nomor_identitas'],
-                    'WesLogin'  => TRUE, 
+                    'WesLogin'  => TRUE,
                 ]);
                 return redirect()->to(base_url('pasien'));
             } else {
@@ -64,6 +65,7 @@ class Auth extends BaseController
                     'role'      => $dataUser['role'],
                     'nomor_identitas' => $dataUser['nomor_identitas'],
                     'tl'        => $dataUser['tl'],
+                    'status_account' => $dataUser['status_account'],
                     'WesLogin'  => TRUE, 
                 ]);
                 if($dataUser['role'] === 'pasien') {
@@ -116,55 +118,85 @@ class Auth extends BaseController
             'name' => [
                 'rules' => 'required|min_length[4]|max_length[50]',
                 'errors' => [
-                    'required' => 'Password harus diisi',
-                    'min_length' => 'Password minimal 4 Karakter',
-                    'max_length' => 'Password maksimal 50 Karakter',
+                    'required' => '{field} harus diisi',
+                    'min_length' => '{field} minimal 4 Karakter',
+                    'max_length' => '{field} maksimal 50 Karakter',
                 ]
             ],
             'nomor_identitas' => [
-                'rules' => 'required|min_length[4]|max_length[50]',
+                'rules' => 'required|min_length[16]|max_length[16]|is_unique[user.nomor_identitas]',
                 'errors' => [
-                    'required' => 'Password harus diisi',
-                    'min_length' => 'Password minimal 4 Karakter',
-                    'max_length' => 'Password maksimal 50 Karakter',
+                    'is_unique' => 'Nomor Identitas sudah digunakan',
+                    'required' => 'Nomor Identitas harus diisi',
+                    'min_length' => 'Nomor Identitas minimal 16 Karakter',
+                    'max_length' => 'Nomor Identitas maksimal 16 Karakter',
                 ]
             ],
             'address' => [
                 'rules' => 'required|min_length[4]|max_length[50]',
                 'errors' => [
-                    'required' => 'Password harus diisi',
-                    'min_length' => 'Password minimal 4 Karakter',
-                    'max_length' => 'Password maksimal 50 Karakter',
+                    'required' => 'Alamat harus diisi',
+                    'min_length' => 'Alamat minimal 4 Karakter',
+                    'max_length' => 'Alamat maksimal 50 Karakter',
                 ]
             ],
             'gender' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'Password harus diisi',
+                    'required' => 'Jenis Kelamin harus diisi',
+                ]
+            ],
+            'foto_ktp' => [
+                'rules' => 'mime_in[foto_ktp,image/jpg,image/jpeg,image/png,image/webp]',
+                'errors' => [
+                    'mime_in'  => 'Maaf file yang anda upload memiliki format yang tidak diizinkan! silahkan upload dengan format JPG, JPEG, dan PNG.',
                 ]
             ],
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
         }
-        $username = $this->request->getVar('username');
-        $password = $this->request->getVar('password');
         $model = new User();
-        $data = [
-            'username'  => $username,
-            'password'  => password_hash($password, PASSWORD_DEFAULT),
-            'name'      => $this->request->getVar('name'),
-            'nomor_identitas' => $this->request->getVar('nomor_identitas'),
-            'address'   => $this->request->getVar('address'),
-            'gender'    => $this->request->getVar('gender'),
-            'role'      => 'pasien',
-        ];
-        if ($model->save($data)) {
-            session()->setFlashdata('success', 'Anda telah berhasil daftar silahkan login.');
-            return redirect()->to('login');
+        $img    = $this->request->getFile('foto_ktp');
+        $randName = $img->getRandomName();
+        if ($img->isValid() && ! $img->hasMoved()) {
+            $img->move('foto_ktp',$randName);
+            $data = [
+                'username'  => $this->request->getVar('username'),
+                'password'  => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'name'      => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'address'   => $this->request->getVar('address'),
+                'gender'    => $this->request->getVar('gender'),
+                'status_account' => 'unverified',
+                'role'      => 'pasien',
+                'foto_ktp' => $randName,
+            ];
+            if ($model->save($data)) {
+                session()->setFlashdata('success', 'Anda telah berhasil daftar silahkan login.');
+                return redirect()->to('login');
+            } else {
+                session()->setFlashdata('error', 'Terjadi Error!');
+                return redirect()->to('register');
+            }
         } else {
-            session()->setFlashdata('error', 'Terjadi Error!');
-            return redirect()->to('register');
+            $data = [
+                'username'  => $this->request->getVar('username'),
+                'password'  => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'name'      => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'address'   => $this->request->getVar('address'),
+                'gender'    => $this->request->getVar('gender'),
+                'status_account' => 'unverified',
+                'role'      => 'pasien',
+            ];
+            if ($model->save($data)) {
+                session()->setFlashdata('success', 'Anda telah berhasil daftar silahkan login.');
+                return redirect()->to('login');
+            } else {
+                session()->setFlashdata('error', 'Terjadi Error!');
+                return redirect()->to('register');
+            }
         }
     }
 }

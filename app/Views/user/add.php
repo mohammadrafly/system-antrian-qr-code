@@ -17,7 +17,7 @@
                                         <?php echo session()->getFlashdata('error'); ?>
                                     </div>
                                 <?php endif; ?>
-								<form class="forms-sample" action="<?= base_url('dashboard/user/store') ?>" method="POST">
+								<form class="forms-sample" action="<?= base_url('dashboard/user/store') ?>" method="POST" enctype="multipart/form-data">
 									<div class="form-group row">
 										<label for="exampleInputUsername2" class="col-sm-3 col-form-label">Username</label>
 										<div class="col-sm-9">
@@ -42,16 +42,22 @@
 											<input name="name" type="text" class="form-control" id="exampleInputMobile" placeholder="Masukkan Nama Lengkap">
 										</div>
 									</div>
+									<div class="form-group row">
+										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Foto KTP</label>
+										<div class="col-sm-9">
+											<input name="foto_ktp" type="file" id="myDropify" class="form-control"/>
+										</div>		
+									</div>
                                     <div class="form-group row">
 										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Nomor Identitas</label>
 										<div class="col-sm-9">
-											<input name="nomor_identitas" type="number" class="form-control" id="exampleInputMobile" placeholder="Masukkan Nomor Identitas">
+											<input name="nomor_identitas" type="number" class="form-control" maxlength="16" id="exampleInputMobile" placeholder="Masukkan Nomor Identitas">
 										</div>
 									</div>
                                     <div class="form-group row">
 										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Nomor HP</label>
 										<div class="col-sm-9">
-											<input name="phone" type="number" class="form-control" id="exampleInputMobile" placeholder="Masukkan Nomor HP">
+											<input name="phone" type="number" maxlength="13" class="form-control" id="exampleInputMobile" placeholder="Masukkan Nomor HP">
 										</div>
 									</div>
                                     <div class="form-group row">
@@ -83,6 +89,16 @@
                                                 <option selected disabled>Pilih Role.. </option>
                                                 <option value="admin">Admin</option>
                                                 <option value="pasien">Pasien</option>
+                                            </select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Status</label>
+										<div class="col-sm-9">
+                                            <select name="status_account" class="form-control" id="exampleFormControlSelect1">
+                                                <option selected disabled>Pilih Status</option>
+                                                <option value="verified">verified</option>
+                                                <option value="unverified">unverified</option>
                                             </select>
 										</div>
 									</div>

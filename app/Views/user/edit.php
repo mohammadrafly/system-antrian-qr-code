@@ -17,7 +17,7 @@
                                         <?php echo session()->getFlashdata('error'); ?>
                                     </div>
                                 <?php endif; ?>
-								<form class="forms-sample" action="<?= base_url('dashboard/user/update') ?>" method="POST">
+								<form class="forms-sample" action="<?= base_url('dashboard/user/update') ?>" method="POST" enctype="multipart/form-data">
                                     <input name="id" type="text" value="<?= $content['id'] ?>" class="form-control" hidden>
 									<div class="form-group row">
 										<label for="exampleInputUsername2" class="col-sm-3 col-form-label">Username</label>
@@ -30,6 +30,19 @@
 										<div class="col-sm-9">
 											<input name="name" type="text" value="<?= $content['name'] ?>" class="form-control" id="exampleInputMobile" placeholder="Masukkan Nama Lengkap">
 										</div>
+									</div>
+									<div class="form-group row">
+										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Foto KTP</label>
+										<div class="col-sm-9">
+											<span>
+													<?php if($content['foto_ktp'] == NULL): ?>
+                                                        <img data-enlargeable width="100" style="cursor: zoom-in" src="<?= base_url('template/assets/images/dummy.png') ;?>" width="100px">
+                                                    <?php elseif($content['foto_ktp']): ?>
+                                                        <img data-enlargeable width="100" style="cursor: zoom-in" src="<?= base_url('foto_ktp/'.$content['foto_ktp']) ?>" width="100px">
+                                                    <?php endif ?>
+											</span>
+											<input name="foto_ktp" type="file" id="myDropify" class="form-control"/>
+										</div>		
 									</div>
                                     <div class="form-group row">
 										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Nomor Identitas</label>
@@ -72,6 +85,19 @@
                                                 <option selected value="<?= $content['role'] ?>"><?= $content['role'] ?></option>
                                                 <option value="admin">Admin</option>
                                                 <option value="pasien">Pasien</option>
+                                            </select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="exampleInputMobile" class="col-sm-3 col-form-label">Status Akun</label>
+										<div class="col-sm-9">
+                                            <select name="status_account" class="form-control" id="exampleFormControlSelect1">
+                                                <option selected value="<?= $content['status_account'] ?>"><?= $content['status_account'] ?></option>
+                                                <?php if($content['status_account'] === 'verified'): ?>
+													<option value="unverified">unverified</option>
+												<?php elseif($content['status_account'] === 'unverified'): ?>
+													<option value="verified">verified</option>
+												<?php endif ?>
                                             </select>
 										</div>
 									</div>

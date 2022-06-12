@@ -102,25 +102,62 @@ class Users extends BaseController
                     'required' => '{field} harus diisi',
                 ]
             ],
+            'foto_ktp' => [
+                'rules' => 'mime_in[foto_ktp,image/jpg,image/jpeg,image/png,image/webp]',
+                'errors' => [
+                    'mime_in'  => 'Maaf file yang anda upload memiliki format yang tidak diizinkan! silahkan upload dengan format JPG, JPEG, dan PNG.',
+                ]
+            ],
         ])) {
             session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
         }
         $model = new User();
-        $data = [
-            'username' => $this->request->getVar('username'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-            'name' => $this->request->getVar('name'),
-            'nomor_identitas' => $this->request->getVar('nomor_identitas'),
-            'phone' => $this->request->getVar('phone'),
-            'tl' => $this->request->getVar('tl'),
-            'address' => $this->request->getVar('address'),
-            'gender' => $this->request->getVar('gender'),
-            'role' => $this->request->getVar('role'),
-        ];
-        $model->insert($data);
-        session()->setFlashData('success','User telah ditambah.');
-        return $this->response->redirect(site_url('dashboard/user'));
+        $img    = $this->request->getFile('foto_ktp');
+        $randName = $img->getRandomName();
+        if ($img->isValid() && ! $img->hasMoved()) {
+            $img->move('foto_ktp',$randName);
+            $data = [
+                'username' => $this->request->getVar('username'),
+                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'name' => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'phone' => $this->request->getVar('phone'),
+                'tl' => $this->request->getVar('tl'),
+                'address' => $this->request->getVar('address'),
+                'gender' => $this->request->getVar('gender'),
+                'role' => $this->request->getVar('role'),
+                'status_account' => $this->request->getVar('status_account'),
+                'foto_ktp' => $randName,
+            ];
+            if ($model->save($data)) {
+                session()->setFlashData('success','User telah ditambah.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            } else {
+                session()->setFlashData('error','Terjadi error.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            }
+        } else {
+            $data = [
+                'username' => $this->request->getVar('username'),
+                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'name' => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'phone' => $this->request->getVar('phone'),
+                'tl' => $this->request->getVar('tl'),
+                'address' => $this->request->getVar('address'),
+                'gender' => $this->request->getVar('gender'),
+                'role' => $this->request->getVar('role'),
+                'status_account' => $this->request->getVar('status_account'),
+            ];
+            if ($model->save($data)) {
+                session()->setFlashData('success','User telah ditambah.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            } else {
+                session()->setFlashData('error','Terjadi error.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            }
+        }
     }
 
     public function edit($id)
@@ -193,25 +230,67 @@ class Users extends BaseController
                     'required' => '{field} harus diisi',
                 ]
             ],
+            'status_account' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} harus diisi',
+                ]
+            ],
+            'foto_ktp' => [
+                'rules' => 'mime_in[foto_ktp,image/jpg,image/jpeg,image/png,image/webp]',
+                'errors' => [
+                    'mime_in'  => 'Maaf file yang anda upload memiliki format yang tidak diizinkan! silahkan upload dengan format JPG, JPEG, dan PNG.',
+                ]
+            ],
         ])) {
-            session()->setFlashdata('error_password', $this->validator->listErrors());
+            session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
         }
         $model = new User();
+        $img = $this->request->getFile('foto_ktp');
         $id = $this->request->getVar('id');
-        $data = [
-            'username' => $this->request->getVar('username'),
-            'name' => $this->request->getVar('name'),
-            'nomor_identitas' => $this->request->getVar('nomor_identitas'),
-            'phone' => $this->request->getVar('phone'),
-            'tl' => $this->request->getVar('tl'),
-            'address' => $this->request->getVar('address'),
-            'gender' => $this->request->getVar('gender'),
-            'role' => $this->request->getVar('role'),
-        ];
-        $model->update($id,$data);
-        session()->setFlashData('success','User telah diupdate.');
-        return $this->response->redirect(site_url('dashboard/user'));
+        $randName = $img->getRandomName();
+        if ($img->isValid() && ! $img->hasMoved()) {
+            $img->move('foto_ktp',$randName);
+            $data = [
+                'username' => $this->request->getVar('username'),
+                'name' => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'phone' => $this->request->getVar('phone'),
+                'tl' => $this->request->getVar('tl'),
+                'address' => $this->request->getVar('address'),
+                'gender' => $this->request->getVar('gender'),
+                'role' => $this->request->getVar('role'),
+                'status_account' => $this->request->getVar('status_account'),
+                'foto_ktp' => $randName,
+            ];
+            if ($model->update($id,$data)) {
+                session()->setFlashData('success','User telah diupdate.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            } else {
+                session()->setFlashData('error','Terjadi error.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            }
+        } else {
+            $data = [
+                'username' => $this->request->getVar('username'),
+                'name' => $this->request->getVar('name'),
+                'nomor_identitas' => $this->request->getVar('nomor_identitas'),
+                'phone' => $this->request->getVar('phone'),
+                'tl' => $this->request->getVar('tl'),
+                'address' => $this->request->getVar('address'),
+                'gender' => $this->request->getVar('gender'),
+                'role' => $this->request->getVar('role'),
+                'status_account' => $this->request->getVar('status_account'),
+            ];
+            if ($model->update($id,$data)) {
+                session()->setFlashData('success','User telah diupdate.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            } else {
+                session()->setFlashData('error','Terjadi error.');
+                return $this->response->redirect(site_url('dashboard/user'));
+            }
+        }
     }
 
     public function delete($id)

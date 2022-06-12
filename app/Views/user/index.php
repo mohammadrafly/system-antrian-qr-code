@@ -30,6 +30,8 @@
                                             <th>Tanggal Lahir</th>
                                             <th>Alamat</th>
                                             <th>Jenis Kelamin</th>
+                                            <th>Status</th>
+                                            <th>Foto KTP</th>
                                             <th>Opsi</th>
                                         </tr>
                                         </thead>
@@ -46,6 +48,14 @@
                                             <td><?= $row->tl ?></td>
                                             <td><?= $row->address ?></td>
                                             <td><?= $row->gender ?></td>
+                                            <td>
+                                            <?php if($row->status_account === 'verified'): ?>
+                                                <span class="badge bg-success text-white"><?= $row->status_account ?></span>
+                                            <?php elseif($row->status_account === 'unverified'): ?>
+                                                <span class="badge bg-warning text-white"><?= $row->status_account ?></span>
+                                            <?php endif ?>
+                                            </td>
+                                            <td><img data-enlargeable width="100" style="cursor: zoom-in" src="<?= base_url('foto_ktp/'.$row->foto_ktp) ?>" width="100px"/></td>
                                             <td>
                                                 <a href="<?= base_url('dashboard/user/delete/'.$row->id) ?>" class="btn btn-danger">Delete</a>
                                                 <a href="<?= base_url('dashboard/user/edit/'.$row->id) ?>" class="btn btn-info">Edit</a>

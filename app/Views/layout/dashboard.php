@@ -7,8 +7,8 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>SAQC | <?= $pages ?></title>
 	<link rel="stylesheet" href="<?= base_url('template/assets/vendors/core/core.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('template/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('template/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('template/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('template/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('template/assets/fonts/feather-font/css/iconfont.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('template/assets/vendors/flag-icon-css/css/flag-icon.min.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('template/assets/css/demo_1/style.css') ?>">
@@ -228,5 +228,36 @@
   <script src="<?= base_url('template/assets/js/sweet-alert.js') ?>"></script>
   <script src="<?= base_url('template/assets/vendors/sweetalert2/sweetalert2.min.js') ?>"></script>
   <script src="<?= base_url('template/assets/vendors/promise-polyfill/polyfill.min.js') ?>"></script>
+  <script src="<?= base_url('template/assets/js/file-upload.js') ?>"></script>
+  <script>
+        $('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+        var src = $(this).attr('src');
+        var modal;
+
+        function removeModal() {
+            modal.remove();
+            $('body').off('keyup.modal-close');
+        }
+        modal = $('<div>').css({
+            background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
+            backgroundSize: 'contain',
+            width: '100%',
+            height: '100%',
+            position: 'fixed',
+            zIndex: '10000',
+            top: '0',
+            left: '0',
+            cursor: 'zoom-out'
+        }).click(function() {
+            removeModal();
+        }).appendTo('body');
+        //handling ESC
+        $('body').on('keyup.modal-close', function(e) {
+            if (e.key === 'Escape') {
+            removeModal();
+            }
+        });
+        });
+    </script>
 </body>
 </html>

@@ -24,7 +24,9 @@ class User extends Model
         'address',
         'gender',
         'qrcode',
-        'role'
+        'role',
+        'status_account',
+        'foto_ktp'
     ];
 
     // Dates

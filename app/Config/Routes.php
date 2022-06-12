@@ -47,37 +47,41 @@ $routes->get('logout', 'Auth::logout');
 /*
 ------------------------------------------------------------------------
 */
-$routes->post('antrian/pilih/(:num)', 'Antrians::addPasien/$1');
-$routes->get('antrian/cetak/nomor/antrian/(:num)', 'Antrians::cetakAntrian/$1');
-//Dashboard
-$routes->get('dashboard', 'Dashboard::indexBackEnd');
-$routes->get('pasien', 'Dashboard::index');
-//Profile
-$routes->get('dashboard/profile/(:any)', 'Profile::index/$1');
-$routes->post('dashboard/profile/update', 'Profile::update');
-$routes->post('dashboard/profile/update/password', 'Profile::updatePassword');
-$routes->post('dashboard/profile/cetak/qrcode', 'Profile::cetakQRCode');
-//Antrian
-$routes->get('dashboard/antrian/(:any)', 'Antrians::index/$1');
-$routes->get('dashboard/antrian/edit/(:num)', 'Antrians::edit/$1');
-$routes->post('dashboard/antrian/update', 'Antrians::update');
-$routes->post('dashboard/antrian/akhiri', 'Antrians::truncateAntrian');
-//Poli
-$routes->get('dashboard/poli', 'Poliklinik::index');
-$routes->get('dashboard/poli/add', 'Poliklinik::add');
-$routes->post('dashboard/poli/store', 'Poliklinik::store');
-$routes->get('dashboard/poli/edit/(:num)', 'Poliklinik::edit/$1');
-$routes->post('dashboard/poli/update', 'Poliklinik::update');
-$routes->get('dashboard/poli/delete/(:num)', 'Poliklinik::delete/$1');
-//user
-$routes->get('dashboard/user', 'Users::index');
-$routes->get('dashboard/user/add', 'Users::add');
-$routes->post('dashboard/user/store', 'Users::store');
-$routes->get('dashboard/user/edit/(:num)', 'Users::edit/$1');
-$routes->post('dashboard/user/update', 'Users::update');
-$routes->get('dashboard/user/delete/(:num)', 'Users::delete/$1');
-//lainnya
-$routes->get('email', 'Home::email');
+$routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Dashboard::indexBackEnd');
+
+    $routes->get('profile/(:any)', 'Profile::index/$1');
+    $routes->post('profile/update', 'Profile::update');
+    $routes->post('profile/update/password', 'Profile::updatePassword');
+    $routes->post('profile/cetak/qrcode', 'Profile::cetakQRCode');
+    //Antrian
+    $routes->get('antrian/(:any)', 'Antrians::index/$1');
+    $routes->get('antrian/edit/(:num)', 'Antrians::edit/$1');
+    $routes->post('antrian/update', 'Antrians::update');
+    $routes->post('antrian/akhiri', 'Antrians::truncateAntrian');
+    //Poli
+    $routes->get('poli', 'Poliklinik::index');
+    $routes->get('poli/add', 'Poliklinik::add');
+    $routes->post('poli/store', 'Poliklinik::store');
+    $routes->get('poli/edit/(:num)', 'Poliklinik::edit/$1');
+    $routes->post('poli/update', 'Poliklinik::update');
+    $routes->get('poli/delete/(:num)', 'Poliklinik::delete/$1');
+    //user
+    $routes->get('user', 'Users::index');
+    $routes->get('user/add', 'Users::add');
+    $routes->post('user/store', 'Users::store');
+    $routes->get('user/edit/(:num)', 'Users::edit/$1');
+    $routes->post('user/update', 'Users::update');
+    $routes->get('user/delete/(:num)', 'Users::delete/$1');
+});
+$routes->group('pasien', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Dashboard::index');
+});
+$routes->group('antrian', ['filter' => 'auth'], function ($routes) {
+    $routes->post('pilih/(:num)', 'Antrians::addPasien/$1');
+    $routes->get('cetak/nomor/antrian/(:num)', 'Antrians::cetakAntrian/$1');
+});
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

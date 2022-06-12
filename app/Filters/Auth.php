@@ -25,8 +25,14 @@ class Auth implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session()->get('WesRegister'))
-        {
+        if (session()->get('WesLogin')) {
+            if (session()->get('status_account') === 'unverified') {
+                session()->setFlashdata('error', 'Akun anda belum diverifikasi!');
+                return redirect()->to('masuk');
+            } elseif (session()->get('role') === 'admin') {
+
+            }
+        } elseif (!session()->get('WesLogin')) {
             session()->setFlashdata('error', 'Register terlebih dahulu!');
             return redirect()->to('register');
         }
