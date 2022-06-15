@@ -23,18 +23,16 @@ class Dashboard extends BaseController
         $antri = new Antrian();
         $pasien = new User();
         $data = [
-            'pasien' => $pasien->countAll(), 
-            'antri' => $antri->countAll(),
-            'poli' => $model->countAll(),
             'antrian' => $antri->getAntrianSaatIni()->getResult(),
             'antrianSaya' => $antri->getAntrianByID()->getResult(),
-            'antrianKat' => $antri->getAntrianSaatIniByKat()->getResult(),
+            'antrianByGroup' => $antri->getAntrianSaatIniByGroup()->getResult(),
             'content' => $model->findAll(), 
             'user' => $pasien->where('id', session()->get('id'))->first(),
             'pages' => 'Dashboard',
             'IniDashboard' => TRUE,
             'QRLogin' => FALSE,
         ];
+        //dd($data);
         return view('dashboard/pasien', $data);
     }
 
@@ -44,12 +42,11 @@ class Dashboard extends BaseController
         $antri = new Antrian();
         $pasien = new User();
         $data = [
-            'pasien' => $pasien->countAll(), 
+            'pasien' => $pasien->getUserWithoutAdminCount(), 
             'antri' => $antri->countAll(),
             'poli' => $model->countAll(),
             'antrian' => $antri->getAntrianSaatIni()->getResult(),
             'antrianSaya' => $antri->getAntrianByID()->getResult(),
-            'antrianKat' => $antri->getAntrianSaatIniByKat()->getResult(),
             'content' => $model->findAll(), 
             'pages' => 'Dashboard',
             'IniDashboard' => TRUE,
@@ -117,7 +114,7 @@ class Dashboard extends BaseController
                 ]
             ],
         ])) {
-            session()->setFlashdata('password', $this->validator->listErrors());
+            session()->setFlashdata('error', $this->validator->listErrors());
             return redirect()->back()->withInput();
         }
         $users = new User();
@@ -178,7 +175,6 @@ class Dashboard extends BaseController
 
                 $logo = Logo::create(__DIR__.'/assets/symfony.png')
                     ->setResizeToWidth(50);
-
                 // Create generic label
                 $label = Label::create('Label')
                     ->setTextColor(new Color(255, 0, 0));

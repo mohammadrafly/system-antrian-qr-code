@@ -50,29 +50,37 @@ $routes->get('logout', 'Auth::logout');
 $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Dashboard::indexBackEnd');
 
-    $routes->get('profile/(:any)', 'Profile::index/$1');
-    $routes->post('profile/update', 'Profile::update');
-    $routes->post('profile/update/password', 'Profile::updatePassword');
-    $routes->post('profile/cetak/qrcode', 'Profile::cetakQRCode');
+    $routes->group('profile', function ($routes) {
+        $routes->get('(:any)', 'Profile::index/$1');
+        $routes->post('update', 'Profile::update');
+        $routes->post('update/password', 'Profile::updatePassword');
+        $routes->post('cetak/qrcode', 'Profile::cetakQRCode');
+    });
     //Antrian
-    $routes->get('antrian/(:any)', 'Antrians::index/$1');
-    $routes->get('antrian/edit/(:num)', 'Antrians::edit/$1');
-    $routes->post('antrian/update', 'Antrians::update');
-    $routes->post('antrian/akhiri', 'Antrians::truncateAntrian');
+    $routes->group('antrian', function ($routes) {
+        $routes->get('(:any)', 'Antrians::index/$1');
+        $routes->get('edit/(:num)', 'Antrians::edit/$1');
+        $routes->post('update', 'Antrians::update');
+        $routes->post('akhiri', 'Antrians::truncateAntrian');
+    });
     //Poli
-    $routes->get('poli', 'Poliklinik::index');
-    $routes->get('poli/add', 'Poliklinik::add');
-    $routes->post('poli/store', 'Poliklinik::store');
-    $routes->get('poli/edit/(:num)', 'Poliklinik::edit/$1');
-    $routes->post('poli/update', 'Poliklinik::update');
-    $routes->get('poli/delete/(:num)', 'Poliklinik::delete/$1');
+    $routes->group('poli', function ($routes) {
+        $routes->get('/', 'Poliklinik::index');
+        $routes->get('add', 'Poliklinik::add');
+        $routes->post('store', 'Poliklinik::store');
+        $routes->get('edit/(:num)', 'Poliklinik::edit/$1');
+        $routes->post('update', 'Poliklinik::update');
+        $routes->get('delete/(:num)', 'Poliklinik::delete/$1');
+    });
     //user
-    $routes->get('user', 'Users::index');
-    $routes->get('user/add', 'Users::add');
-    $routes->post('user/store', 'Users::store');
-    $routes->get('user/edit/(:num)', 'Users::edit/$1');
-    $routes->post('user/update', 'Users::update');
-    $routes->get('user/delete/(:num)', 'Users::delete/$1');
+    $routes->group('user', function ($routes) {
+        $routes->get('/', 'Users::index');
+        $routes->get('add', 'Users::add');
+        $routes->post('store', 'Users::store');
+        $routes->get('edit/(:num)', 'Users::edit/$1');
+        $routes->post('update', 'Users::update');
+        $routes->get('delete/(:num)', 'Users::delete/$1');
+    });
 });
 $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Dashboard::index');

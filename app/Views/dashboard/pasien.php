@@ -112,8 +112,8 @@
             </div>
 
             <div class="row">
-            <?php if($antrianKat): ?>
-              <?php foreach($antrianKat as $row): ?>                
+            <?php if($antrian): ?>
+              <?php foreach($antrianByGroup as $row): ?>                
                 <div class="col-lg-3 col-md-6">
                   <div class="count-box">
                     <i class="bi bi-journal-richtext"></i>
@@ -122,8 +122,8 @@
                   </div>
                 </div>
               <?php endforeach ?>
-            <?php elseif($antrianKat == NULL): ?>
-                <h4 class="button text-center">Belum Ada Antrian Saat Ini!</h5>
+            <?php elseif($antrian == NULL): ?>
+              <h4 class="button text-center">Belum Ada Antrian</h5>
             <?php endif ?>
             </div>
 

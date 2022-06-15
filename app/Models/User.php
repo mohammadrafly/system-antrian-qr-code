@@ -60,4 +60,12 @@ class User extends Model
                 ->get();
         return $query;
     }
+
+    public function getUserWithoutAdminCount()
+    {
+        $query = $this->db->table('user')
+                ->like('role', 'pasien')
+                ->countAllResults();
+        return $query;
+    }
 }

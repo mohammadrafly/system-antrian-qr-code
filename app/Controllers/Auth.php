@@ -19,7 +19,7 @@ class Auth extends BaseController
     {
         $model = new User();
         $qrcode = $this->request->getVar('qrcode');
-        $data = explode('|', $qrcode); // |user|user|
+        $data = explode('|', $qrcode); // |user|user| |username|password|
         $username = $data[1];
         $password = $data[2];
         $dataUser = $model->where(['username' => $username,])->first();

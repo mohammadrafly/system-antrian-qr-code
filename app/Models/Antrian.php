@@ -76,7 +76,7 @@ class Antrian extends Model
                     ->join('poli', 'poli.id = antrian.poli', 'left')
                     ->select('antrian.*, poli.title AS nama_poli')
                     ->orderBy('nomor_antrian','DESC')
-                    ->where('date', date('Y-m-d'))
+                    ->where('date', date('Y-m-d')) //2022-06-13
                     ->where('user', session()->get('id'))
                     ->get();
         return $builder;
@@ -93,16 +93,17 @@ class Antrian extends Model
         return $builder;
     }
 
-    public function getAntrianSaatIniByKat()
-    {        
+    public function getAntrianSaatIniByGroup()
+    {   
         $builder = $this->db->table('antrian')
-                    ->limit('4')
                     ->join('poli', 'poli.id = antrian.poli', 'left')
                     ->select('antrian.*, poli.title AS nama_poli')
-                    ->orderBy('nomor_antrian','ASC')
-                    ->orderBy('poli','DESC')
+                    ->select('antrian.*, antrian.poli AS poliklinik')
+                    ->selectMin('nomor_antrian')
                     ->where('date', date('Y-m-d'))
                     ->where('status !=', 'SELESAI')
+                    ->orderBy('nomor_antrian','ASC')
+                    ->groupBy('poliklinik')
                     ->get();
         return $builder;
     }

@@ -62,12 +62,16 @@
 					<div class="col-md-8 col-xl-6 mx-auto">
 						<div class="card">
 							<div class="row">
-                <div class="col-md-4 pr-md-0">
-                  <div class="auth-left-wrapper">
+                <div class="col-md-6 pr-md-0">
+                  <div class="auth-left-wrapper" style="background-image: url(<?= base_url('template/assets/images/bg-auth.jpg') ?>); ">
 
                   </div>
                 </div>
-                <div class="col-md-8 pl-md-0">
+                <?php if($Login === TRUE): ?>
+                <div class="col-md-6 pl-md-0">
+                <?php elseif($Login === FALSE): ?>
+                <div class="col-md-12 pl-md-3">
+                <?php endif ?>
                   <div class="auth-form-wrapper px-4 py-5">
                     <?php if($Login === TRUE): ?>
                     <a href="#" class="noble-ui-logo d-block mb-2">System Antrian<span>QR Code</span></a>

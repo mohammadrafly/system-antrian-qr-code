@@ -49,6 +49,8 @@ class Antrians extends BaseController
     public function addPasien($id)
     {
         $model = new Antrian();
+        $poli = new Poli();
+        //ambil nomor antrian yang terbaru
         $result = $model->getAntrian($id)->getResult();
         if ($result) {
             foreach ($result as $row): {
@@ -66,13 +68,19 @@ class Antrians extends BaseController
             'poli' => $id,
             'date' => $date,
         ];
+        $limit = $poli->where('limits', $id)->first();
         $check = $model->where('user', $user)->first();
         if ($check === null) {
-			if($model->save($data)) {
-                session()->setFlashData('success','Permintaan berhasil, silahkan tunggu!');
-                return $this->response->redirect(site_url('pasien'));
+            if ($limit > $no) {
+                if($model->save($data)) {
+                    session()->setFlashData('success','Permintaan berhasil, silahkan tunggu!');
+                    return $this->response->redirect(site_url('pasien'));
+                } else {
+                    session()->setFlashData('error','Terjadi error!');
+                    return $this->response->redirect(site_url('pasien'));
+                }
             } else {
-                session()->setFlashData('error','Terjadi error!');
+                session()->setFlashData('error','Maaf Antrian telah mencapai limit, silahkan datang besok.');
                 return $this->response->redirect(site_url('pasien'));
             }
         } else {
@@ -121,7 +129,7 @@ class Antrians extends BaseController
             session()->setFlashData('success','Mode antrian telah diakhiri.');
             return $this->response->redirect(site_url('dashboard/antrian/'.date('Y-m-d')));
         } else {
-            session()->setFlashData('success','Mode antrian telah diakhiri.');
+            session()->setFlashData('error','Mode antrian telah diakhiri.');
             return $this->response->redirect(site_url('dashboard/antrian/'.date('Y-m-d')));
         }
     }
